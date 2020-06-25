@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
@@ -32,14 +33,19 @@ public class MoviesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movies);
         rvMovies = findViewById(R.id.rvMovies);
+        //initialize movies array
+        movies = new ArrayList<>();
 
         // Create the adapter to convert the array to views
-        MoviesAdapter adapter = new MoviesAdapter(movies);
+        adapter = new MoviesAdapter(movies);
 
         // Attach the adapter to a ListView
         rvMovies.setAdapter(adapter);
+        //add layout manager
+        rvMovies.setLayoutManager(new LinearLayoutManager(this));
 
         fetchMovies();
+
     }
 
 
@@ -52,9 +58,11 @@ public class MoviesActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Headers headers, JSON response) {
                 try {
                     JSONArray moviesJson = response.jsonObject.getJSONArray("results");
-                    movies = Movie.fromJSONArray(moviesJson);
+                    Log.i(MoviesActivity.class.getSimpleName(), "Results: " + moviesJson.toString());
+                    movies.addAll(Movie.fromJSONArray(moviesJson));
+                    adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e(MoviesActivity.class.getSimpleName(), "Hit json exception", e);
                 }
             }
 

@@ -5,6 +5,8 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,7 @@ import com.bumptech.glide.Glide;
 import com.codepath.debuggingchallenges.R;
 import com.codepath.debuggingchallenges.models.Movie;
 
-import java.util.List;
+import java.util.*;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
 
@@ -75,8 +77,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         Resources resources = viewHolder.tvName.getResources();
         double movieRating = movie.getRating();
 
+        //reset color back to white if rating < 6
         if (movieRating > 6) {
+//            Log.i("MoviesAdapter", movie.getTitle() + " " + movieRating);
             viewHolder.view.setBackgroundColor(Color.GREEN);
+        } else {
+            viewHolder.view.setBackgroundColor(Color.WHITE);
         }
 
         String ratingText = String.format(resources.getString(R.string.rating), movieRating);
